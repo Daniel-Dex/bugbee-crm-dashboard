@@ -55,9 +55,13 @@ def load_settings(project_root: Path | None = None, require_credentials: bool = 
         names = ", ".join(missing)
         raise RuntimeError(f"Variáveis de ambiente ausentes: {names}")
 
+    base_url = (os.getenv("MAGAZORD_BASE_URL") or "").rstrip("/")
+    if require_credentials and base_url and not base_url.lower().startswith("https://"):
+        raise RuntimeError("MAGAZORD_BASE_URL deve usar HTTPS para proteger as credenciais da API.")
+
     data_dir = root / "data"
     return Settings(
-        base_url=(os.getenv("MAGAZORD_BASE_URL") or "").rstrip("/"),
+        base_url=base_url,
         api_key=os.getenv("MAGAZORD_API_KEY") or "",
         api_secret=os.getenv("MAGAZORD_API_SECRET") or "",
         project_root=root,

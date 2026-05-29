@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import logging
 from datetime import date
@@ -126,12 +127,17 @@ def format_int(value: int) -> str:
     return f"{int(value):,}".replace(",", ".")
 
 
+def safe_text(value: object) -> str:
+    """Escapa texto antes de inserir no HTML público."""
+    return html.escape(str(value), quote=True)
+
+
 def render_html(data: dict) -> str:
     """Renderiza o dashboard público com identidade Bugbee."""
     rows_html = "\n".join(
         f"""
-        <tr class="{row['status']}">
-          <td>{row['mes']}</td>
+        <tr class="{safe_text(row['status'])}">
+          <td>{safe_text(row['mes'])}</td>
           <td>{format_int(row['realizado_2025'])}</td>
           <td>{format_int(row['meta'])}</td>
           <td>{format_int(row['realizado_2026'])}</td>
@@ -147,6 +153,7 @@ def render_html(data: dict) -> str:
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
   <meta http-equiv="refresh" content="900" />
   <title>Bugbee | Metas CRM</title>
   <style>
@@ -310,7 +317,7 @@ def render_html(data: dict) -> str:
         <h1>Painel de Metas CRM</h1>
         <div class="sub">Positivação por cliente único em janela de 180 dias</div>
       </div>
-      <div class="updated">Atualizado em {data['updated_at']}</div>
+      <div class="updated">Atualizado em {safe_text(data['updated_at'])}</div>
     </header>
     <section class="cards">
       <div class="card"><span>Realizado 2025</span><strong>{format_int(totals['realizado_2025'])}</strong></div>
@@ -336,7 +343,7 @@ def render_html(data: dict) -> str:
       </table>
     </section>
     <footer>
-      Dados atualizados automaticamente pela API Magazord via GitHub Actions. Credenciais ficam em GitHub Secrets; esta página pública contém apenas métricas consolidadas.
+      Dados atualizados automaticamente pela API Magazord.
     </footer>
   </main>
 </body>

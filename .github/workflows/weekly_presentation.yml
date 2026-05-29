@@ -1,10 +1,10 @@
 name: Bugbee weekly presentation
 
 on:
-  schedule:
-    # GitHub Actions usa UTC. 11:00 UTC = 08:00 America/Sao_Paulo.
-    - cron: "0 11 * * 1"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   weekly-presentation:
@@ -28,12 +28,3 @@ jobs:
 
       - name: Run weekly automation
         run: python -m src.main
-
-      - name: Upload generated files
-        uses: actions/upload-artifact@v4
-        with:
-          name: bugbee-weekly-output
-          path: |
-            data/output/*.xlsx
-            data/output/*.pptx
-            logs/*.txt
