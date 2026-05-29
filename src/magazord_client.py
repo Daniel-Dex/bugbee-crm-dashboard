@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import random
 import time
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -30,7 +31,15 @@ class MagazordClient:
     payload filters for `/api/v3/produtos/query`.
     """
 
-    def __init__(self, base_url: str, api_key: str, api_secret: str, logger: logging.Logger, timeout: int = 45):
+    def __init__(
+        self,
+        base_url: str,
+        api_key: str,
+        api_secret: str,
+        logger: logging.Logger,
+        timeout: int = 45,
+        max_retries: int = 5,
+    ):
         if requests is None or HTTPBasicAuth is None:
             raise RuntimeError("Dependência ausente: requests. Execute `pip install -r requirements.txt`.")
         self.base_url = base_url.rstrip("/")
@@ -39,6 +48,7 @@ class MagazordClient:
         self.session.headers.update({"Accept": "application/json", "Content-Type": "application/json"})
         self.timeout = timeout
         self.logger = logger
+        self.max_retries = max_retries
 
     def _url(self, path: str) -> str:
         path = path if path.startswith("/") else f"/{path}"
@@ -53,15 +63,30 @@ class MagazordClient:
     def _request(self, method: str, path: str, **kwargs: Any) -> dict[str, Any] | list[Any]:
         url = self._url(path)
         safe_params = kwargs.get("params") or {}
-        self.logger.info("Consultando endpoint %s params=%s", path, safe_params)
-        response = self.session.request(method, url, timeout=self.timeout, **kwargs)
-        if response.status_code == 429:
-            retry_after = int(response.headers.get("Retry-After", "10"))
-            self.logger.warning("Rate limit em %s; aguardando %ss", path, retry_after)
-            time.sleep(retry_after)
-            response = self.session.request(method, url, timeout=self.timeout, **kwargs)
-        response.raise_for_status()
-        return response.json()
+        self.logger.debug("Consultando endpoint %s params=%s", path, safe_params)
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                response = self.session.request(method, url, timeout=self.timeout, **kwargs)
+                if response.status_code == 429:
+                    retry_after = int(response.headers.get("Retry-After", "0") or 0)
+                    delay = retry_after or min(90, (2 ** attempt) + random.uniform(0, 2))
+                    self.logger.warning("Rate limit em %s; tentativa %s/%s; aguardando %.1fs", path, attempt, self.max_retries, delay)
+                    time.sleep(delay)
+                    continue
+                if response.status_code in {500, 502, 503, 504}:
+                    delay = min(90, (2 ** attempt) + random.uniform(0, 2))
+                    self.logger.warning("Erro temporario %s em %s; tentativa %s/%s; aguardando %.1fs", response.status_code, path, attempt, self.max_retries, delay)
+                    time.sleep(delay)
+                    continue
+                response.raise_for_status()
+                return response.json()
+            except requests.RequestException as exc:
+                if attempt >= self.max_retries:
+                    raise
+                delay = min(90, (2 ** attempt) + random.uniform(0, 2))
+                self.logger.warning("Falha temporaria em %s: %s; tentativa %s/%s; aguardando %.1fs", path, exc, attempt, self.max_retries, delay)
+                time.sleep(delay)
+        raise RuntimeError(f"Falha ao consultar {path} apos {self.max_retries} tentativas.")
 
     @staticmethod
     def _items(payload: dict[str, Any] | list[Any]) -> tuple[list[dict[str, Any]], bool]:
@@ -82,7 +107,11 @@ class MagazordClient:
         rows: list[dict[str, Any]] = []
         page = 1
         params = dict(params or {})
+        seen_pages: set[int] = set()
         while True:
+            if page in seen_pages:
+                raise RuntimeError(f"Loop de paginacao detectado em {path} page={page}")
+            seen_pages.add(page)
             params.update({"limit": limit, "page": page})
             payload = self._request("GET", path, params=params)
             items, has_more = self._items(payload)
@@ -124,15 +153,17 @@ class MagazordClient:
         self.logger.info("%s: %s registros", name, len(rows))
         return EndpointResult(name, path, rows)
 
-    def buscar_pedidos(self, start: date, end: date) -> EndpointResult:
+    def buscar_pedidos(self, start: date, end: date, minimal: bool = False) -> EndpointResult:
+        params = {
+            "dataHora[gte]": start.isoformat(),
+            "dataHora[lte]": end.isoformat(),
+            "orderDirection": "asc",
+        }
         return self.get_paginated(
             "pedidos",
             "/v2/site/pedido",
-            {
-                "dataHora[gte]": start.isoformat(),
-                "dataHora[lte]": end.isoformat(),
-                "orderDirection": "asc",
-            },
+            params,
+            limit=500,
         )
 
     def buscar_pedido_detalhe(self, codigo_pedido: int | str) -> dict[str, Any]:

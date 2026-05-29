@@ -3,7 +3,7 @@ name: Bugbee CRM dashboard
 on:
   schedule:
     # Atualiza todos os dias às 08:20 em America/Bahia.
-    - cron: "20 11 * * *"
+    - cron: "20 6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -39,7 +39,18 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build CRM dashboard
-        run: python gerar_painel_crm.py --output ./docs/crm-metas
+        shell: bash
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            echo "Tentativa ${attempt}/6 de atualizar o painel CRM"
+            if python gerar_painel_crm.py --output ./docs/crm-metas; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 6 ]; then
+              sleep $((attempt * 300))
+            fi
+          done
+          exit 1
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

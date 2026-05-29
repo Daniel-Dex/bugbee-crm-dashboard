@@ -53,7 +53,7 @@ def status_color(atingimento: int) -> str:
 
 def build_dashboard_data(start: date, end: date, logger: logging.Logger) -> dict:
     """Busca a API, calcula positivação 180d e prepara o painel mensal de metas CRM."""
-    pedidos_validos, _clientes = coletar_dados_api(start, end, logger)
+    pedidos_validos, _clientes = coletar_dados_api(start, end, logger, include_customers=False, log_samples=False)
     classificados = classificar_recompras(pedidos_validos, logger)
     mensal = agregar_mensal(classificados, logger)
     tendencia = analisar_tendencia(mensal, logger)

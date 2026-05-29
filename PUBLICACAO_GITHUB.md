@@ -40,6 +40,10 @@ Ative o GitHub Pages por Actions:
 
 O workflow `.github/workflows/crm_dashboard.yml` executa diariamente, busca os dados na API usando GitHub Secrets e publica a pasta `docs/`.
 
+A rotina atual roda durante a madrugada em America/Bahia, usa retry com backoff para falhas temporarias, respeita a paginacao `page/limit` da API e publica apenas metricas agregadas do painel.
+
+O workflow semanal nao publica mais artefatos com planilhas, apresentacoes ou logs. Qualquer saida com dado pessoal deve permanecer fora do repositorio publico e fora dos artefatos de Actions.
+
 Depois do primeiro deploy, o painel deve ficar em:
 
 `https://<usuario-ou-org>.github.io/<repositorio>/crm-metas/`

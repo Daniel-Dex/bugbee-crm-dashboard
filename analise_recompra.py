@@ -182,22 +182,33 @@ def map_customer(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def coletar_dados_api(start: date, end: date, logger: logging.Logger) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Coleta historico completo de pedidos e cadastro de clientes diretamente da API configurada."""
+def coletar_dados_api(
+    start: date,
+    end: date,
+    logger: logging.Logger,
+    include_customers: bool = True,
+    log_samples: bool = True,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Coleta pedidos e, quando necessario, cadastro de clientes diretamente da API configurada."""
     logger.info("Etapa 1 - Coleta via API de %s ate %s", start.isoformat(), end.isoformat())
     settings = load_settings(require_credentials=True)
     client = MagazordClient(settings.base_url, settings.api_key, settings.api_secret, logger)
 
-    pedidos_raw = client.buscar_pedidos(start, end).rows
-    clientes_raw = client.buscar_clientes(start, end).rows
+    pedidos_raw = client.buscar_pedidos(start, end, minimal=not include_customers).rows
+    clientes_raw = client.buscar_clientes(start, end).rows if include_customers else []
     logger.info("Total bruto de pedidos coletados: %s", len(pedidos_raw))
-    logger.info("Total bruto de clientes coletados: %s", len(clientes_raw))
+    if include_customers:
+        logger.info("Total bruto de clientes coletados: %s", len(clientes_raw))
+    else:
+        logger.info("Cadastro de clientes nao coletado: o painel usa apenas cliente_id dos pedidos validos.")
 
-    if pedidos_raw:
+    if log_samples and pedidos_raw:
         sample_orders = pd.DataFrame(pedidos_raw[:5])
         logger.info("Amostra visual de campos de pedidos: %s", list(sample_orders.columns))
         logger.info("Amostra mapeada de pedidos:\n%s", pd.DataFrame([map_order(row) for row in pedidos_raw[:5]]).to_string(index=False))
-    if clientes_raw:
+    elif pedidos_raw:
+        logger.info("Schema minimo validado: pedido_id, cliente_id, data_pedido, valor_pedido e status_pedido.")
+    if log_samples and include_customers and clientes_raw:
         sample_customers = pd.DataFrame(clientes_raw[:5])
         logger.info("Amostra visual de campos de clientes: %s", list(sample_customers.columns))
         logger.info("Amostra mapeada de clientes:\n%s", pd.DataFrame([map_customer(row) for row in clientes_raw[:5]]).to_string(index=False))
@@ -219,7 +230,8 @@ def coletar_dados_api(start: date, end: date, logger: logging.Logger) -> tuple[p
         clientes["cliente_id"] = clientes["cliente_id"].astype(str)
 
     logger.info("Total de pedidos validos apos filtro: %s", len(pedidos_validos))
-    logger.info("Total de clientes unicos coletados: %s", clientes["cliente_id"].nunique() if not clientes.empty else 0)
+    if include_customers:
+        logger.info("Total de clientes unicos coletados: %s", clientes["cliente_id"].nunique() if not clientes.empty else 0)
     logger.info("Total de clientes compradores unicos nos pedidos validos: %s", pedidos_validos["cliente_id"].nunique())
     logger.info("Periodo minimo dos pedidos validos: %s", pedidos_validos["data_pedido"].min())
     logger.info("Periodo maximo dos pedidos validos: %s", pedidos_validos["data_pedido"].max())

@@ -1,12 +1,12 @@
 {
-  "updated_at": "29/05/2026 10:00",
+  "updated_at": "29/05/2026 15:03",
   "periodo_api": {
     "inicio": "2021-04-26",
     "fim": "2026-05-29"
   },
   "totals": {
     "realizado_2025": 2346,
-    "meta": 3665,
+    "meta": 3664,
     "realizado_2026": 503,
     "atingimento": 14,
     "taxa_recompra_2026": 25
@@ -105,7 +105,7 @@
     {
       "mes": "Novembro",
       "realizado_2025": 460,
-      "meta": 1068,
+      "meta": 1067,
       "realizado_2026": 0,
       "taxa_recompra_2026": 0,
       "atingimento": 0,
