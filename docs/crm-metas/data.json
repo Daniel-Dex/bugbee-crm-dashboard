@@ -1,0 +1,124 @@
+{
+  "updated_at": "29/05/2026 08:45",
+  "periodo_api": {
+    "inicio": "2021-04-26",
+    "fim": "2026-05-28"
+  },
+  "totals": {
+    "realizado_2025": 2346,
+    "meta": 3665,
+    "realizado_2026": 503,
+    "atingimento": 14,
+    "taxa_recompra_2026": 25
+  },
+  "rows": [
+    {
+      "mes": "Janeiro",
+      "realizado_2025": 127,
+      "meta": 149,
+      "realizado_2026": 66,
+      "taxa_recompra_2026": 27,
+      "atingimento": 44,
+      "status": "low"
+    },
+    {
+      "mes": "Fevereiro",
+      "realizado_2025": 253,
+      "meta": 300,
+      "realizado_2026": 99,
+      "taxa_recompra_2026": 25,
+      "atingimento": 33,
+      "status": "low"
+    },
+    {
+      "mes": "Março",
+      "realizado_2025": 162,
+      "meta": 191,
+      "realizado_2026": 128,
+      "taxa_recompra_2026": 24,
+      "atingimento": 67,
+      "status": "low"
+    },
+    {
+      "mes": "Abril",
+      "realizado_2025": 193,
+      "meta": 227,
+      "realizado_2026": 114,
+      "taxa_recompra_2026": 26,
+      "atingimento": 50,
+      "status": "low"
+    },
+    {
+      "mes": "Maio",
+      "realizado_2025": 163,
+      "meta": 192,
+      "realizado_2026": 96,
+      "taxa_recompra_2026": 23,
+      "atingimento": 50,
+      "status": "low"
+    },
+    {
+      "mes": "Junho",
+      "realizado_2025": 173,
+      "meta": 282,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Julho",
+      "realizado_2025": 335,
+      "meta": 422,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Agosto",
+      "realizado_2025": 146,
+      "meta": 149,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Setembro",
+      "realizado_2025": 113,
+      "meta": 286,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Outubro",
+      "realizado_2025": 143,
+      "meta": 216,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Novembro",
+      "realizado_2025": 460,
+      "meta": 1068,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    },
+    {
+      "mes": "Dezembro",
+      "realizado_2025": 78,
+      "meta": 183,
+      "realizado_2026": 0,
+      "taxa_recompra_2026": 0,
+      "atingimento": 0,
+      "status": "low"
+    }
+  ]
+}

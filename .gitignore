@@ -1,0 +1,34 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.venv/
+
+# Python/cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# API snapshots and local generated data
+data/raw/
+data/processed/
+data/history/
+data/output/
+logs/
+relatorios/
+outputs/
+
+# Local/private inputs
+data/input/
+
+# Large dependency folders
+node_modules/
+voc-um-especialista-em-ppcp-e-2/
+
+# Other local work not needed for the public CRM dashboard
+build_bugbee_ceo_report.py
+
+# Office/editor noise
+~$*
+*.tmp
+*.bak

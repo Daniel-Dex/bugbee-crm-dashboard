@@ -1,0 +1,39 @@
+name: Bugbee weekly presentation
+
+on:
+  schedule:
+    # GitHub Actions usa UTC. 11:00 UTC = 08:00 America/Sao_Paulo.
+    - cron: "0 11 * * 1"
+  workflow_dispatch:
+
+jobs:
+  weekly-presentation:
+    runs-on: ubuntu-latest
+    env:
+      MAGAZORD_BASE_URL: ${{ secrets.MAGAZORD_BASE_URL }}
+      MAGAZORD_API_KEY: ${{ secrets.MAGAZORD_API_KEY }}
+      MAGAZORD_API_SECRET: ${{ secrets.MAGAZORD_API_SECRET }}
+      TZ: America/Sao_Paulo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly automation
+        run: python -m src.main
+
+      - name: Upload generated files
+        uses: actions/upload-artifact@v4
+        with:
+          name: bugbee-weekly-output
+          path: |
+            data/output/*.xlsx
+            data/output/*.pptx
+            logs/*.txt

@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content="900" />
+  <title>Bugbee | Metas CRM</title>
+  <style>
+    @font-face {
+      font-family: "Rubrik";
+      src: url("./fonts/Rubrik.otf") format("opentype");
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "Rubrik";
+      src: url("./fonts/Rubrik SemiBold.otf") format("opentype");
+      font-weight: 600;
+    }
+    @font-face {
+      font-family: "Rubrik";
+      src: url("./fonts/Rubrik Bold.otf") format("opentype");
+      font-weight: 700;
+    }
+    :root {
+      --ink: #073747;
+      --ink-2: #0b4555;
+      --orange: #aa4a1f;
+      --cream: #fbf7f1;
+      --line: #d8d0c8;
+      --green: #0a7a52;
+      --red: #b42318;
+      --amber: #b7791f;
+      --text: #102a34;
+      --muted: #60717a;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--cream);
+      color: var(--text);
+      font-family: "Rubrik", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+    header {
+      background: var(--ink);
+      color: var(--white);
+      padding: 24px 28px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+    }
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .sub {
+      margin-top: 8px;
+      color: #d9e8ed;
+      font-size: 14px;
+    }
+    .updated {
+      border: 1px solid rgba(255,255,255,.38);
+      padding: 10px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .card span {
+      display: block;
+      text-align: center;
+      background: var(--orange);
+      color: var(--white);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .card strong {
+      display: block;
+      text-align: center;
+      padding: 18px 10px;
+      color: var(--ink);
+      font-size: 30px;
+      line-height: 1;
+    }
+    .card:nth-child(2) span { background: var(--ink-2); }
+    .card:nth-child(3) span { background: var(--green); }
+    .card:nth-child(4) span { background: var(--ink); }
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th {
+      background: var(--ink);
+      color: var(--white);
+      padding: 12px 10px;
+      font-size: 13px;
+      text-align: right;
+    }
+    th:first-child, td:first-child { text-align: left; }
+    td {
+      border-top: 1px solid var(--line);
+      padding: 13px 10px;
+      text-align: right;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    td:first-child {
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    tr:nth-child(even) td { background: #fff8f1; }
+    tr.ok td:nth-child(6) { color: var(--green); }
+    tr.warn td:nth-child(6) { color: var(--amber); }
+    tr.low td:nth-child(6) { color: var(--red); }
+    footer {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+    @media (max-width: 820px) {
+      main { padding: 14px; }
+      header { display: block; }
+      .updated { display: inline-block; margin-top: 14px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      td { font-size: 14px; }
+      th { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Painel de Metas CRM</h1>
+        <div class="sub">Positivação por cliente único em janela de 180 dias</div>
+      </div>
+      <div class="updated">Atualizado em 29/05/2026 08:45</div>
+    </header>
+    <section class="cards">
+      <div class="card"><span>Realizado 2025</span><strong>2.346</strong></div>
+      <div class="card"><span>Meta 2026</span><strong>3.665</strong></div>
+      <div class="card"><span>Realizado 2026</span><strong>503</strong></div>
+      <div class="card"><span>Atingimento</span><strong>14%</strong></div>
+    </section>
+    <section class="table-wrap">
+      <table aria-label="Metas mensais CRM">
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Realizado 2025</th>
+            <th>Meta</th>
+            <th>Realizado 2026</th>
+            <th>Taxa recompra</th>
+            <th>% Meta</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="low">
+          <td>Janeiro</td>
+          <td>127</td>
+          <td>149</td>
+          <td>66</td>
+          <td>27%</td>
+          <td>44%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Fevereiro</td>
+          <td>253</td>
+          <td>300</td>
+          <td>99</td>
+          <td>25%</td>
+          <td>33%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Março</td>
+          <td>162</td>
+          <td>191</td>
+          <td>128</td>
+          <td>24%</td>
+          <td>67%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Abril</td>
+          <td>193</td>
+          <td>227</td>
+          <td>114</td>
+          <td>26%</td>
+          <td>50%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Maio</td>
+          <td>163</td>
+          <td>192</td>
+          <td>96</td>
+          <td>23%</td>
+          <td>50%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Junho</td>
+          <td>173</td>
+          <td>282</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Julho</td>
+          <td>335</td>
+          <td>422</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Agosto</td>
+          <td>146</td>
+          <td>149</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Setembro</td>
+          <td>113</td>
+          <td>286</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Outubro</td>
+          <td>143</td>
+          <td>216</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Novembro</td>
+          <td>460</td>
+          <td>1.068</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+
+        <tr class="low">
+          <td>Dezembro</td>
+          <td>78</td>
+          <td>183</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </section>
+    <footer>
+      Dados atualizados automaticamente pela API Magazord via GitHub Actions. Credenciais ficam em GitHub Secrets; esta página pública contém apenas métricas consolidadas.
+    </footer>
+  </main>
+</body>
+</html>
