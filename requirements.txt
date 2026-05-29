@@ -6,3 +6,5 @@ requests==2.34.2
 python-pptx==1.0.2
 reportlab==4.4.9
 tzdata==2026.2
+fastapi==0.124.2
+uvicorn==0.38.0

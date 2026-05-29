@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bugbee-crm-auth
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn auth_backend:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: AUTH_COOKIE_SECURE
+        value: "true"
+      - key: AUTH_DB_PATH
+        value: /var/data/auth.sqlite3
+      - key: AUTH_SECRET_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: bugbee-crm-auth-data
+      mountPath: /var/data
+      sizeGB: 1
